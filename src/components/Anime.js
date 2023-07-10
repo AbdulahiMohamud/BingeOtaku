@@ -5,33 +5,36 @@ export default function Anime() {
   const [pageNumber, setPageNumber] = useState(1);
 
   // do the api call to get the info from the backend use axios or a regular fetch (up to future me (: )
-  useEffect(() => {
+  const getAnimeData = () => {
     fetch(`${process.env.REACT_APP_SPRING_SERVER}/anime/top/${pageNumber}`)
       .then((response) => response.json())
       .then((data) => setAnimeData(data))
-      // try catch for error handling
-      .then(console.log(animeData))
       .catch((error) => console.error("Error fetching Anime data:", error));
-  });
+  };
+
+  // useEffect(() =>{
+  //   getAnimeData();
+  // },[pageNumber, animeData])
 
   // funtion to increment or decrement the page
   const handlePageIncrease = () => {
     setPageNumber(pageNumber + 1);
   };
   const handlePageDecrease = () => {
+    if(pageNumber > 1)
     setPageNumber(pageNumber - 1);
   };
 
   return (
     <>
-      {pageNumber === 1 ? (
-        <button onClick={() => handlePageIncrease}>next page</button>
-      ) : (
-        <>
-          <button onClick={() => handlePageDecrease}>Last page</button>
-          <button onClick={() => handlePageIncrease}>next page</button>
-        </>
-      )}
-    </>
+    {pageNumber === 1 ? (
+      <button onClick={handlePageIncrease}>Next Page</button>
+    ) : (
+      <>
+        <button onClick={handlePageDecrease}>Previous Page</button>
+        <button onClick={handlePageIncrease}>Next Page</button>
+      </>
+    )}
+  </>
   );
 }
