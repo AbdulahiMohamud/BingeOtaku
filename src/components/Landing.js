@@ -2,6 +2,9 @@ import 'tailwindcss/tailwind.css';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Link, Route, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
+import Anime from './Anime'; // Import the Anime component
+import Manhwa from './Manhwa'; // Import the Manhwa component
 
 const user = {
   name: 'Tom Cook',
@@ -10,12 +13,10 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
+  { name: 'Anime', href: '/anime', current: true, component: Anime },
+  { name: 'Manhwa', href: '/manhwa', current: false, component: Manhwa }
 ]
+  
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
@@ -202,8 +203,39 @@ export default function Landing(){
         </main>
       </div>
 
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            {/* ... */}
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-baseline space-x-4">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={classNames(
+                      item.current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'rounded-md px-3 py-2 text-sm font-medium'
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    
+      {/* Routes */}
+      <Routes>
+        {navigation.map((item) => (
+          <Route key={item.name} path={item.href} component={item.component} />
+        ))}
+      </Routes>
     </>
   )
 

@@ -7,8 +7,8 @@ import Manhwa from './components/Manhwa';
 function App() {
   return (
     <>
-    {/* <Landing /> */}
-    <Manhwa />
+    <Landing />
+    {/* <Manhwa /> */}
   
     {/* <Anime /> */}
     </>
