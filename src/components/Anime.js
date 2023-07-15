@@ -15,6 +15,21 @@ export default function Anime() {
   const [animeData, setAnimeData] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAnime, setSelectedAnime] = useState(null);
+  let hoverTimeout;
+
+  const handleMouseEnter = (anime) => {
+    hoverTimeout = setTimeout(() => {
+      setSelectedAnime(anime);
+      setShowModal(true);
+    },1500);
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(hoverTimeout);
+    setShowModal(false);
+  };
 
   useEffect(() => {
     const getAnimeData = () => {
@@ -97,24 +112,51 @@ export default function Anime() {
           </select>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {animeData.map((anime) => (
-            <div key={anime.title} className="bg-white p-4 rounded shadow-md">
-              <p className="text-gray-700">
-                Ranking: <span className="font-semibold">{anime.ranking}</span>
-              </p>
-              <img
-                src={anime.image}
-                alt={anime.title}
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h2 className="text-xl font-semibold">{anime.title}</h2>
-              <p className="text-gray-500 mb-4">{anime.synopsis}</p>
-
-              {/* Other anime data */}
+        {/* Anime cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3">
+        {animeData.map((anime) => (
+          <div
+            key={anime.title}
+            className="bg-white p-4 rounded shadow-md flex h-50 w-70"
+            onMouseEnter={() => handleMouseEnter(anime)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mr-4">
+              <p className="text-gray-700 text-xl font-semibold">{anime.ranking}</p>
             </div>
-          ))}
+            <img
+              src={anime.image}
+              alt={anime.title}
+              className="w-full h-48 object-cover mb-4 rounded"
+            />
+             
+            <div className="flex flex-col overflow-scroll">
+              <h2 className="text-xl font-semibold mb-2">{anime.title}</h2>
+              {/* Other anime data */}
+              <p className="text-sky-600">Status: {anime.status}</p>
+              <p>Episodes: {anime.episodes}</p>
+              {anime.genres.map((genre) => (
+                  <span
+                    key={genre}
+                    className="inline-block bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700 h-5"
+                  >
+                    {genre}
+                  </span>
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {showModal && selectedAnime && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded shadow-md">
+            <h2 className="text-xl font-semibold mb-2">{selectedAnime.title}</h2>
+            <p className="text-black">{selectedAnime.synopsis}</p>
+          </div>
         </div>
+      )}
 
         <div className="flex justify-center mt-8">
           {pageNumber > 1 && (
