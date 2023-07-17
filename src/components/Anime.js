@@ -55,24 +55,6 @@ export default function Anime() {
     }
   };
 
-  const handleGenreChange = (event) => {
-    const selectedOptions = Array.from(
-      event.target.selectedOptions,
-      (option) => option.value
-    );
-    setSelectedGenres(selectedOptions);
-  };
-
-  const filterAnimeByGenre = (anime) => {
-    if (selectedGenres.length === 0) {
-      return true; // No genre selected, show all anime
-    }
-    return anime.genres.some((genre) => selectedGenres.includes(genre));
-  };
-
-  const filteredAnimeData = Array.isArray(animeData)
-    ? animeData.filter(filterAnimeByGenre)
-    : [];
 
   return (
     <>
@@ -93,27 +75,8 @@ export default function Anime() {
           Next Page
         </button>
       </div>
-      <div className="container mx-auto px-4">
-        <div className="flex justify-center mb-4">
-          <label htmlFor="genre-select" className="mr-2 font-semibold">
-            Filter by Genre:
-          </label>
-          <select
-            id="genre-select"
-            multiple
-            className="rounded border border-gray-300 p-1"
-            onChange={handleGenreChange}
-          >
-            {genreList.map((genre) => (
-              <option key={genre} value={genre}>
-                {genre}
-              </option>
-            ))}
-          </select>
-        </div>
-
         {/* Anime cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
         {animeData.map((anime) => (
           <div
             key={anime.title}
@@ -121,32 +84,35 @@ export default function Anime() {
             onMouseEnter={() => handleMouseEnter(anime)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mr-4">
-              <p className="text-gray-700 text-xl font-semibold">{anime.ranking}</p>
+            <div className="flex items-center justify-center w-10 h-10 rounded-full mr-4">
+              <p>Rank:</p>
+              <p className="text-red-500 font-semibold"> {anime.ranking}</p>
             </div>
             <img
               src={anime.image}
               alt={anime.title}
-              className="w-full h-48 object-cover mb-4 rounded"
+              className="w-40 h-48  object-cover mb-4 rounded"
             />
              
-            <div className="flex flex-col overflow-scroll">
-              <h2 className="text-xl font-semibold mb-2">{anime.title}</h2>
-              {/* Other anime data */}
-              <p className="text-sky-600">Status: {anime.status}</p>
-              <p>Episodes: {anime.episodes}</p>
-              {anime.genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="inline-block bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700 h-5"
-                  >
-                    {genre}
-                  </span>
-                ))}
-            </div>
-          </div>
+             <div className="flex flex-col">
+        <h2 className="text-xl font-semibold mb-2">{anime.title}</h2>
+        <p className="text-gray-600 text-sm mb-1">Status: {anime.status}</p>
+        <p className="text-gray-600 text-sm mb-1">Episodes: {anime.episodes}</p>
+        <div className="flex flex-wrap mt-2">
+          {anime.genres.map((genre) => (
+            <span
+              key={genre}
+              className="inline-block bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700"
+            >
+              {genre}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
         ))}
       </div>
+      
 
       {/* Modal */}
       {showModal && selectedAnime && (
@@ -175,7 +141,7 @@ export default function Anime() {
             Next Page
           </button>
         </div>
-      </div>
+      
     </>
   );
 }
