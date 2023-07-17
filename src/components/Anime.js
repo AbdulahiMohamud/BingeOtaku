@@ -84,7 +84,7 @@ export default function Anime() {
             onMouseEnter={() => handleMouseEnter(anime)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-full mr-4">
+            <div className="flex items-center justify-center w-5 h-10 rounded-full mr-3">
               <p>Rank:</p>
               <p className="text-red-500 font-semibold"> {anime.ranking}</p>
             </div>
