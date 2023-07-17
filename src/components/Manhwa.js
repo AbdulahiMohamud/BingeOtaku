@@ -101,9 +101,11 @@ export default function Manhwa() {
 
   const handlePageIncrease = () => {
     setPageNumber(pageNumber + 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const handlePageDecrease = () => {
     if (pageNumber > 1) setPageNumber(pageNumber - 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -188,35 +190,23 @@ export default function Manhwa() {
           </>
         )}
       </Listbox>
-      {pageNumber === 1 ? (
-        <>
-          <p>page: {pageNumber}</p>
+      <div className="flex justify-center mt-8">
+        {pageNumber > 1 && (
           <button
-            class="underline decoration-sky-600 hover:decoration-blue-400"
-            onClick={handlePageIncrease}
-          >
-            Next Page
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            class="rounded-xl hover:decoration-red-600"
             onClick={handlePageDecrease}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mr-4"
           >
-            Previous Page
+            Previous
           </button>
-
-          <p>page: {pageNumber}</p>
-
-          <button
-            class="rounded-xl hover:decoration-red-600"
-            onClick={handlePageIncrease}
-          >
-            Next Page
-          </button>
-        </>
-      )}
+        )}
+        <p className="text-gray-700">Page: {pageNumber}</p>
+        <button
+          onClick={handlePageIncrease}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-4"
+        >
+          Next
+        </button>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {manhwaData.map((manhwa) => (
           <div
@@ -245,7 +235,31 @@ export default function Manhwa() {
             </a>
           </div>
         ))}
+        
       </div>
+
+      <div className="flex justify-center mt-8">
+        {pageNumber > 1 && (
+          <button
+            onClick={handlePageDecrease}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mr-4"
+          >
+            Previous
+          </button>
+        )}
+        <p className="text-gray-700">Page: {pageNumber}</p>
+        <button
+          onClick={handlePageIncrease}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-4"
+        >
+          Next
+        </button>
+      </div>
+
+      
+
     </>
+
+    
   );
 }
