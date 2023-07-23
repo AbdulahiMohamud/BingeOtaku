@@ -94,6 +94,7 @@ export default function Manhwa() {
       )
         .then((responce) => responce.json())
         .then((data) => setManhwaData(data))
+        .then(console.log(manhwaData))
         .catch((error) => console.error("Error fetching Anime data:", error));
     };
     getManhwaData();

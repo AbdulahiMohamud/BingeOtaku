@@ -107,7 +107,7 @@ export default function Anime() {
                 ))}
               </div>
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold h-8 w-9"
+                className=" bg-purple-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 h-10"
                 onClick={() => handleMouseEnter(anime)}
               >
                 Read more ...
