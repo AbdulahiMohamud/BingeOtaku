@@ -18,12 +18,12 @@ export default function Anime() {
   const [showModal, setShowModal] = useState(false);
   const [selectedAnime, setSelectedAnime] = useState(null);
 
-  const handleMouseEnter = (anime) => {
+  const handleClickAnime = (anime) => {
     setSelectedAnime(anime);
     setShowModal(true);
   };
 
-  const handleMouseLeave = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
   };
 
@@ -71,36 +71,35 @@ export default function Anime() {
         </button>
       </div>
       {/* Anime cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {animeData.map((anime) => (
           <div
             key={anime.title}
-            className="bg-white p-4 rounded shadow-md flex h-50 w-70"
-            onClick={() => handleMouseEnter(anime)}
+            className="bg-white rounded-lg p-4 shadow hover:bg-sky-700"
+            onClick={() => handleClickAnime(anime)}
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-full mr-3">
-              <p>Rank:</p>
-              <p className="text-red-500 font-semibold"> {anime.ranking}</p>
-            </div>
+            
+              <p className= "text-lg font-semibold"> {`Ranking: ${anime.ranking}`}</p>
+            
             <img
               src={anime.image}
               alt={anime.title}
-              className="w-40 h-48  object-cover mb-4 rounded gap-2"
+              className="w-full h-auto mb-4"
             />
 
-            <div className="flex flex-col left-2">
-              <h2 className="text-xl font-semibold mb-2">{anime.title}</h2>
-              <p className="text-gray-600 text-sm mb-1">
+            <div className="">
+              <h2 className="text-lg font-bold mb-2">{anime.title}</h2>
+              <p className=" tect-medium mb-1">
                 Status: {anime.status}
               </p>
               <p className="text-gray-600 text-sm mb-1">
                 Episodes: {anime.episodes}
               </p>
-              <div className="flex flex-wrap mt-2">
+              <div className="">
                 {anime.genres.map((genre) => (
                   <span
                     key={genre}
-                    className="inline-block bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700"
+                    className="bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700"
                   >
                     {genre}
                   </span>
@@ -108,7 +107,7 @@ export default function Anime() {
               </div>
               <button
                 className=" bg-purple-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 h-10"
-                onClick={() => handleMouseEnter(anime)}
+                onClick={() => handleClickAnime(anime)}
               >
                 Read more ...
               </button>
@@ -122,7 +121,7 @@ export default function Anime() {
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-4"
-            onClick={handleMouseLeave}
+            onClick={handleCloseModal}
           >
             close
           </button>
@@ -152,6 +151,8 @@ export default function Anime() {
           Next Page
         </button>
       </div>
+
+      
     </>
   );
 }
