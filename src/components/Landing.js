@@ -5,6 +5,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {BrowserRouter , Routes , Route} from 'react-router-dom'
 import Anime from './Anime'; // Import the Anime component
 import Manhwa from './Manhwa'; // Import the Manhwa component
+import Chapter from './Chapter';
 
 const user = {
   name: 'Tom Cook',
@@ -14,7 +15,9 @@ const user = {
 }
 const navigation = [
   { name: 'Anime', href: '/anime', current: false},
-  { name: 'Manhwa', href: '/manhwa', current: false}
+  { name: 'Manhwa', href: '/manhwa', current: false},
+  { name: 'Chapters', href: '/chapters', current: false}
+
 ]
   
 const userNavigation = [
@@ -208,6 +211,8 @@ export default function Landing(){
                 <Routes>
                 <Route exact path='/anime' element={<Anime/>} />
                 <Route exact path='/manhwa' element={<Manhwa/>} />
+                {/* <Route exact path='/chapters' element={<Chapter/>} /> */}
+
                 </Routes>
                 
                 </BrowserRouter>

@@ -2,6 +2,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import parse from "html-react-parser";
+import Chapter from "./Chapter";
+import {BrowserRouter , Routes , Route} from 'react-router-dom'
+
 
 const providerList = [
   {
@@ -15,12 +18,6 @@ const providerList = [
     slug: "asura",
     name: "Asura Scans",
     baseURL: "https://www.asurascans.com/",
-  },
-  {
-    id: 3,
-    slug: "omega",
-    name: "Omega Scans",
-    baseURL: "https://omegascans.com/",
   },
   {
     id: 4,
@@ -85,7 +82,9 @@ function classNames(...classes) {
 export default function Manhwa() {
   const [pageNumber, setPageNumber] = useState(1);
   const [manhwaData, setManhwaData] = useState([]);
+  const [selectedManhwa, setSelectedManhwa] = useState(null);
   const [selected, setSelected] = useState(providerList[1]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getManhwaData = () => {
@@ -107,6 +106,16 @@ export default function Manhwa() {
   const handlePageDecrease = () => {
     if (pageNumber > 1) setPageNumber(pageNumber - 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleClickManhwa = (manhwa) => {
+    setSelectedManhwa(manhwa);
+    console.log({ selectedManhwa });
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
   };
 
   return (
@@ -213,15 +222,26 @@ export default function Manhwa() {
           <div
             key={manhwa.slug}
             className="bg-white rounded-lg p-4 shadow hover:bg-sky-700"
+            onClick={() => handleClickManhwa(manhwa)}
           >
-            <img
-              src={manhwa.coverURL}
-              alt={manhwa.title}
-              className="w-full h-auto mb-4"
-            />
+            {/* <ImageDisplay imageUrlOrHtml={manhwa.coverURL} /> */}
+            {manhwa.coverURL.length < 1 || manhwa.provider === "void" ? (
+              <img
+                src="/NoImageFound.png"
+                alt={manhwa.title}
+                className="w-full h-auto mb-4"
+              />
+            ) : (
+              <img
+                src={manhwa.coverURL}
+                alt={manhwa.title}
+                className="w-full h-auto mb-4"
+              />
+            )}
+
             <h2 className="text-lg font-bold mb-2">{manhwa.title}</h2>
             <div
-              className="h-20 overflow-scroll hover:col-"
+              className="h-20 overflow-hidden hover:col-"
               style={{ scrollbarWidth: "thin" }} // Customize the scrollbar width if needed
             >
               <p className="text-black">{parse(manhwa.synopsis)}</p>
@@ -236,8 +256,41 @@ export default function Manhwa() {
             </a>
           </div>
         ))}
-        
       </div>
+
+      {/* Modal */}
+      {showModal && selectedManhwa && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded shadow-md">
+            <h2 className="text-xl font-semibold mb-2">
+              {selectedManhwa.title}
+            </h2>
+            <p className="text-black">{parse(selectedManhwa.synopsis)}</p>
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-20"
+              onClick={handleModalClose}
+            >
+              Close
+            </button>
+
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-20"
+              href="/chapters"
+        
+            >
+              First Chapter
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* {
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/chapters" element={<Chapter />} />
+          </Routes>
+        </BrowserRouter>
+      } */}
 
       <div className="flex justify-center mt-8">
         {pageNumber > 1 && (
@@ -256,11 +309,6 @@ export default function Manhwa() {
           Next
         </button>
       </div>
-
-      
-
     </>
-
-    
   );
 }
