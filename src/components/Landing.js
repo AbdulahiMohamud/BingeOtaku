@@ -1,5 +1,5 @@
 import 'tailwindcss/tailwind.css';
-import { Fragment } from 'react'
+import { Fragment, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {BrowserRouter , Routes , Route} from 'react-router-dom'
@@ -31,6 +31,7 @@ function classNames(...classes) {
 }
 
 export default function Landing(){
+  const [selectedManhwa, setSelectedManhwa] = useState(null);
   
 
 
@@ -210,8 +211,8 @@ export default function Landing(){
                 <BrowserRouter>
                 <Routes>
                 <Route exact path='/anime' element={<Anime/>} />
-                <Route exact path='/manhwa' element={<Manhwa/>} />
-                {/* <Route exact path='/chapters' element={<Chapter/>} /> */}
+                <Route exact path='/manhwa' element={<Manhwa selectedManhwa={selectedManhwa} setSelectedManhwa={setSelectedManhwa}/>} />
+                <Route exact path='/chapters' element={<Chapter selectedManhwa={selectedManhwa}/>} />
 
                 </Routes>
                 

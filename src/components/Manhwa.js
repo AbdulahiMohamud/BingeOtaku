@@ -3,7 +3,9 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import parse from "html-react-parser";
 import Chapter from "./Chapter";
-import {BrowserRouter , Routes , Route} from 'react-router-dom'
+import {BrowserRouter , Routes , Route, Link} from 'react-router-dom'
+
+
 
 
 const providerList = [
@@ -79,12 +81,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Manhwa() {
+export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
   const [pageNumber, setPageNumber] = useState(1);
   const [manhwaData, setManhwaData] = useState([]);
-  const [selectedManhwa, setSelectedManhwa] = useState(null);
+//   const [selectedManhwa, setSelectedManhwa] = useState(null);
   const [selected, setSelected] = useState(providerList[1]);
   const [showModal, setShowModal] = useState(false);
+ 
 
   useEffect(() => {
     const getManhwaData = () => {
@@ -273,24 +276,20 @@ export default function Manhwa() {
               Close
             </button>
 
-            <button
+            <Link
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-20"
-              href="/chapters"
-        
+              to={'/chapters'}        
             >
               First Chapter
-            </button>
+            </Link>
           </div>
         </div>
       )}
 
-      {/* {
-        <BrowserRouter>
-          <Routes>
-            <Route exact path="/chapters" element={<Chapter />} />
-          </Routes>
-        </BrowserRouter>
-      } */}
+      {
+        
+        
+      }
 
       <div className="flex justify-center mt-8">
         {pageNumber > 1 && (
