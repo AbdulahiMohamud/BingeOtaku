@@ -2,8 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import parse from "html-react-parser";
-import Chapter from "./Chapter";
-import {BrowserRouter , Routes , Route, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 
 
@@ -96,7 +95,6 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
       )
         .then((responce) => responce.json())
         .then((data) => setManhwaData(data))
-        .then(console.log(manhwaData))
         .catch((error) => console.error("Error fetching Anime data:", error));
     };
     getManhwaData();
@@ -113,7 +111,6 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
 
   const handleClickManhwa = (manhwa) => {
     setSelectedManhwa(manhwa);
-    console.log({ selectedManhwa });
     setShowModal(true);
   };
 
@@ -278,9 +275,9 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
 
             <Link
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-20"
-              to={'/chapters'}        
+              to={'/chapter-List'}        
             >
-              First Chapter
+              Chapter List
             </Link>
           </div>
         </div>
