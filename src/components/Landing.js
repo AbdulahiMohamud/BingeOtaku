@@ -6,6 +6,7 @@ import {BrowserRouter , Routes , Route} from 'react-router-dom'
 import Anime from './Anime'; // Import the Anime component
 import Manhwa from './Manhwa'; // Import the Manhwa component
 import Chapter from './Chapter';
+import ChapterList from './ChapterList';
 
 const user = {
   name: 'Tom Cook',
@@ -32,6 +33,9 @@ function classNames(...classes) {
 
 export default function Landing(){
   const [selectedManhwa, setSelectedManhwa] = useState(null);
+  const [selectedChapter, setSelectedChapter] = useState([]);
+  const [chapterListData, setChapterListData] = useState([]);
+
   
 
 
@@ -212,7 +216,9 @@ export default function Landing(){
                 <Routes>
                 <Route exact path='/anime' element={<Anime/>} />
                 <Route exact path='/manhwa' element={<Manhwa selectedManhwa={selectedManhwa} setSelectedManhwa={setSelectedManhwa}/>} />
-                <Route exact path='/chapters' element={<Chapter selectedManhwa={selectedManhwa}/>} />
+                <Route exact path='/chapters' element={<Chapter selectedManhwa={selectedManhwa} selectedChapter={selectedChapter} setSelectedChapter={setSelectedChapter}/>} />
+                <Route exact path='/chapter-List' element={<ChapterList selectedManhwa={selectedManhwa} setSelectedChapter={setSelectedChapter} chapterListData={chapterListData} setChapterListData={setChapterListData} />} />
+
 
                 </Routes>
                 
