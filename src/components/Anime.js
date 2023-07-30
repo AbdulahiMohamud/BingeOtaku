@@ -32,7 +32,6 @@ export default function Anime() {
       fetch(`${process.env.REACT_APP_SPRING_SERVER}/anime/top/${pageNumber}`)
         .then((response) => response.json())
         .then((data) => setAnimeData(data.data))
-        .then(console.log(animeData))
         .catch((error) => console.error("Error fetching Anime data:", error));
     };
 
