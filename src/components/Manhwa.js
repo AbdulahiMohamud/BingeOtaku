@@ -83,7 +83,6 @@ function classNames(...classes) {
 export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
   const [pageNumber, setPageNumber] = useState(1);
   const [manhwaData, setManhwaData] = useState([]);
-//   const [selectedManhwa, setSelectedManhwa] = useState(null);
   const [selected, setSelected] = useState(providerList[1]);
   const [showModal, setShowModal] = useState(false);
  

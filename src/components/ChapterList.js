@@ -15,6 +15,7 @@ export default function ChapterList({
       `${process.env.REACT_APP_SPRING_SERVER}/manhwa/chapter-List/${selectedManhwa.provider}/${selectedManhwa.slug}/${pageNum}`
     )
       .then((response) => response.json())
+      .then(console.log({ selectedManhwa }))
       .then((data) => {
         if (data.length > 0) {
           // Filter out duplicates and append new data to existing chapterListData
@@ -53,19 +54,40 @@ export default function ChapterList({
     // eslint-disable-next-line
   }, [chapterListData]);
 
-
   const handleClickChapter = (chapter) => {
-    
     setSelectedChapter(chapter);
   };
 
   return (
     <>
-      <div>
+      <div  >
+        <div className="bg-white rounded-lg p-4 shadow hover:bg-sky-700">
+          {selectedManhwa.coverURL.length < 1 ||
+          selectedManhwa.provider === "void" ? (
+            <img
+              src="/NoImageFound.png"
+              alt={selectedManhwa.title}
+              className="w-full h-auto mb-4"
+            />
+          ) : (
+            <img
+              src={selectedManhwa.coverURL}
+              alt={selectedManhwa.title}
+              className="w-full h-auto mb-4"
+            />
+          )}
+
+          
+
+          
+        </div>
+
+        <div><p>{selectedManhwa.synopsis}</p></div>
+
+        <div className="h-60 overflow-scroll hover:col-"
+              style={{ scrollbarWidth: "thin" }} >
         {chapterListData.map((chapter, idx) => (
-          <div key={idx} onClick={() => handleClickChapter(chapter)}>
-            {/* <h1>{chapter.provider_webtoon}</h1>
-          <h1>{chapter.chapterNum}</h1> */}
+          <div  key={idx} onClick={() => handleClickChapter(chapter)}>
             <ul>
               <li>
                 <Link to="/chapters">{chapter.fullTitle}</Link>
@@ -74,6 +96,8 @@ export default function ChapterList({
             </ul>
           </div>
         ))}
+
+</div>
       </div>
     </>
   );
