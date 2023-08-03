@@ -2,10 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import parse from "html-react-parser";
-import {Link} from 'react-router-dom'
-
-
-
+import { Link } from "react-router-dom";
 
 const providerList = [
   {
@@ -80,12 +77,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
+export default function Manhwa({ selectedManhwa, setSelectedManhwa }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [manhwaData, setManhwaData] = useState([]);
   const [selected, setSelected] = useState(providerList[1]);
   const [showModal, setShowModal] = useState(false);
- 
+
 
   useEffect(() => {
     const getManhwaData = () => {
@@ -111,6 +108,11 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
   const handleClickManhwa = (manhwa) => {
     setSelectedManhwa(manhwa);
     setShowModal(true);
+    return (
+      <>
+        <Link to={"/chapter-List"}></Link>
+      </>
+    );
   };
 
   const handleModalClose = () => {
@@ -218,42 +220,51 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {manhwaData.map((manhwa) => (
-          <div
-            key={manhwa.slug}
-            className="bg-white rounded-lg p-4 shadow hover:bg-sky-700"
-            onClick={() => handleClickManhwa(manhwa)}
-          >
-            {/* <ImageDisplay imageUrlOrHtml={manhwa.coverURL} /> */}
-            {manhwa.coverURL.length < 1 || manhwa.provider === "void" ? (
-              <img
-                src="/NoImageFound.png"
-                alt={manhwa.title}
-                className="w-full h-auto mb-4"
-              />
-            ) : (
-              <img
-                src={manhwa.coverURL}
-                alt={manhwa.title}
-                className="w-full h-auto mb-4"
-              />
-            )}
-
-            <h2 className="text-lg font-bold mb-2">{manhwa.title}</h2>
+          <Link to={"/chapter-List"}>
             <div
-              className="h-20 overflow-hidden hover:col-"
-              style={{ scrollbarWidth: "thin" }} // Customize the scrollbar width if needed
+              key={manhwa.slug}
+              className="bg-white rounded-lg p-4 shadow hover:bg-sky-700"
+              onClick={() => handleClickManhwa(manhwa)}
             >
-              <p className="text-black">{parse(manhwa.synopsis)}</p>
+              {/* <ImageDisplay imageUrlOrHtml={manhwa.coverURL} /> */}
+              {manhwa.coverURL.length < 1 || manhwa.provider === "void" ? (
+                <img
+                  src="/NoImageFound.png"
+                  alt={manhwa.title}
+                  className="w-full h-auto mb-4"
+                />
+              ) : (
+                <img
+                  src={manhwa.coverURL}
+                  alt={manhwa.title}
+                  className="w-full h-auto mb-4"
+                />
+              )}
+
+              <h2 className="text-lg font-bold mb-2">{manhwa.title}</h2>
+              <div className=" overflow-scroll">
+                {manhwa.genre !== null &&
+                  manhwa.genre.length > 0 &&
+                  manhwa.genre.map((genre) => (
+                    <span
+                      key={genre}
+                      className="bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700 hover:bg-red-950"
+                    >
+                      {genre}
+                    </span>
+                  ))}
+              </div>
+
+              <a
+                href={manhwa.sourceURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              >
+                Read More
+              </a>
             </div>
-            <a
-              href={manhwa.sourceURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-            >
-              Read More
-            </a>
-          </div>
+          </Link>
         ))}
       </div>
 
@@ -274,7 +285,7 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
 
             <Link
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-20"
-              to={'/chapter-List'}        
+              to={"/chapter-List"}
             >
               Chapter List
             </Link>
@@ -282,10 +293,7 @@ export default function Manhwa({selectedManhwa , setSelectedManhwa}) {
         </div>
       )}
 
-      {
-        
-        
-      }
+      {}
 
       <div className="flex justify-center mt-8">
         {pageNumber > 1 && (

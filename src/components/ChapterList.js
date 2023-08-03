@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ChapterList({
   selectedManhwa,
@@ -9,6 +9,7 @@ export default function ChapterList({
 }) {
   const [pageNum, setPageNum] = useState(1);
   const [allChaptersFetched, setAllChaptersFetched] = useState(false);
+  const navigate = useNavigate();
 
   const getChapterData = () => {
     fetch(
@@ -60,45 +61,48 @@ export default function ChapterList({
 
   return (
     <>
-      <div  >
-        <div className="bg-white rounded-lg p-4 shadow hover:bg-sky-700">
-          {selectedManhwa.coverURL.length < 1 ||
-          selectedManhwa.provider === "void" ? (
-            <img
-              src="/NoImageFound.png"
-              alt={selectedManhwa.title}
-              className="w-full h-auto mb-4"
-            />
-          ) : (
-            <img
-              src={selectedManhwa.coverURL}
-              alt={selectedManhwa.title}
-              className="w-full h-auto mb-4"
-            />
-          )}
+    <div onClick={() => navigate(-1)}>back</div>
+  <div className="grid grid-cols-3 gap-4">
+    {/* Book Cover */}
+    <div className="col-span-1">
+      {selectedManhwa.coverURL.length < 1 || selectedManhwa.provider === "void" ? (
+        <img
+          src="/NoImageFound.png"
+          alt={selectedManhwa.title}
+          className="w-50 h-40 mb-4"
+        />
+      ) : (
+        <img
+          src={selectedManhwa.coverURL}
+          alt={selectedManhwa.title}
+          className="w-100 h-80 mb-4 "
+        />
+      )}
+    </div>
 
-          
+    {/* Book Title and Synopsis */}
+    <div className="col-span-2">
+      <h2 className="text-2xl font-bold">{selectedManhwa.title}</h2>
+      <p className="text-black">{selectedManhwa.synopsis}</p>
+    </div>
 
-          
+    {/* Chapter List */}
+    <div className="col-span-3 max-h-60 overflow-y-auto scrollbar-thin hover:">
+      {chapterListData.map((chapter, idx) => (
+        <div key={idx} onClick={() => handleClickChapter(chapter)}>
+          <ul>
+            <li>
+              <Link to="/chapters" className="text-blue-500 hover:underline">
+                {chapter.fullTitle}
+              </Link>
+            </li>
+            {/* Add other properties as needed */}
+          </ul>
         </div>
+      ))}
+    </div>
+  </div>
+</>
 
-        <div><p>{selectedManhwa.synopsis}</p></div>
-
-        <div className="h-60 overflow-scroll hover:col-"
-              style={{ scrollbarWidth: "thin" }} >
-        {chapterListData.map((chapter, idx) => (
-          <div  key={idx} onClick={() => handleClickChapter(chapter)}>
-            <ul>
-              <li>
-                <Link to="/chapters">{chapter.fullTitle}</Link>
-              </li>
-              {/* Add other properties as needed */}
-            </ul>
-          </div>
-        ))}
-
-</div>
-      </div>
-    </>
   );
 }
