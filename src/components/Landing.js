@@ -16,9 +16,7 @@ const user = {
 }
 const navigation = [
   { name: 'Anime', href: '/anime', current: false},
-  { name: 'Manhwa', href: '/manhwa', current: false},
-  { name: 'Chapters', href: '/chapters', current: false}
-
+  { name: 'Manhwa', href: '/manhwa', current: false}
 ]
   
 const userNavigation = [
@@ -58,7 +56,7 @@ export default function Landing(){
         ```
       */}
       <div className="min-h-full">
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-blue-500">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
