@@ -11,7 +11,7 @@ const genreList = [
   "Suspense",
 ];
 
-export default function Anime() {
+export default function Anime({loggedInUser}) {
   const [animeData, setAnimeData] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedGenres, setSelectedGenres] = useState([]);
@@ -32,6 +32,7 @@ export default function Anime() {
       fetch(`${process.env.REACT_APP_SPRING_SERVER}/anime/top/${pageNumber}`)
         .then((response) => response.json())
         .then((data) => setAnimeData(data.data))
+        .then(console.log(loggedInUser))
         .catch((error) => console.error("Error fetching Anime data:", error));
     };
 

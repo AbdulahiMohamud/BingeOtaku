@@ -2,7 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import parse from "html-react-parser";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ImageDisplay from "./ImageDisplay";
 
 const providerList = [
   {
@@ -82,6 +83,11 @@ export default function Manhwa({ selectedManhwa, setSelectedManhwa }) {
   const [manhwaData, setManhwaData] = useState([]);
   const [selected, setSelected] = useState(providerList[1]);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const selectedProvider = selected.slug;
+  const selectedPage = pageNumber;
+
+ 
 
 
   useEffect(() => {
@@ -239,15 +245,16 @@ export default function Manhwa({ selectedManhwa, setSelectedManhwa }) {
                   alt={manhwa.title}
                   className="w-full h-auto mb-4"
                 />
+                
               )}
 
               <h2 className="text-lg font-bold mb-2">{manhwa.title}</h2>
               <div className=" overflow-scroll">
                 {manhwa.genre !== null &&
                   manhwa.genre.length > 0 &&
-                  manhwa.genre.map((genre) => (
+                  manhwa.genre.map((genre, idx) => (
                     <span
-                      key={genre}
+                      key={idx}
                       className="bg-gray-200 rounded-full px-2 py-1 mt-2 mr-2 text-sm text-gray-700 hover:bg-red-950"
                     >
                       {genre}

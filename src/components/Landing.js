@@ -2,21 +2,19 @@ import 'tailwindcss/tailwind.css';
 import { Fragment, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import {BrowserRouter , Routes , Route} from 'react-router-dom'
+import {BrowserRouter , Routes , Route, useParams} from 'react-router-dom'
 import Anime from './Anime'; // Import the Anime component
 import Manhwa from './Manhwa'; // Import the Manhwa component
 import Chapter from './Chapter';
 import ChapterList from './ChapterList';
+import Register from './Register';
+import Login from './Login';
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+
 const navigation = [
   { name: 'Anime', href: '/anime', current: false},
-  { name: 'Manhwa', href: '/manhwa', current: false}
+  { name: 'Manhwa', href: '/manhwa', current: false},
+  { name: 'Signup', href: '/signup', current: false}
 ]
   
 const userNavigation = [
@@ -33,7 +31,14 @@ export default function Landing(){
   const [selectedManhwa, setSelectedManhwa] = useState(null);
   const [selectedChapter, setSelectedChapter] = useState([]);
   const [chapterListData, setChapterListData] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState('');
 
+
+  const user = {
+    name: loggedInUser.username,
+    email: loggedInUser.email,
+    imageUrl: loggedInUser.profileImageUrl
+  }
   
 
 
@@ -91,22 +96,25 @@ export default function Landing(){
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      <button
+                      {/* <button
                         type="button"
                         className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                      </button> */}
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
+                        
                         <div>
                           <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="sr-only">Open user menu</span>
                             <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
                           </Menu.Button>
                         </div>
+                      
+                        
                         <Transition
                           as={Fragment}
                           enter="transition ease-out duration-100"
@@ -177,13 +185,13 @@ export default function Landing(){
                       <div className="text-base font-medium leading-none text-white">{user.name}</div>
                       <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    </button> */}
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
@@ -212,10 +220,13 @@ export default function Landing(){
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{
                 <BrowserRouter>
                 <Routes>
-                <Route exact path='/anime' element={<Anime/>} />
+                <Route exact path='/anime' element={<Anime loggedInUser={loggedInUser}/>} />
                 <Route exact path='/manhwa' element={<Manhwa selectedManhwa={selectedManhwa} setSelectedManhwa={setSelectedManhwa}/>} />
                 <Route exact path='/chapters' element={<Chapter selectedManhwa={selectedManhwa} selectedChapter={selectedChapter} setSelectedChapter={setSelectedChapter}/>} />
                 <Route exact path='/chapter-List' element={<ChapterList selectedManhwa={selectedManhwa} setSelectedChapter={setSelectedChapter} chapterListData={chapterListData} setChapterListData={setChapterListData} />} />
+                <Route exact path='/signup' element={<Register setLoggedInUser={setLoggedInUser} />}/>
+                <Route exact path='/login' element={<Login setLoggedInUser={setLoggedInUser} />}/>
+
 
 
                 </Routes>
