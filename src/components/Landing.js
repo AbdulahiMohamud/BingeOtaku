@@ -1,53 +1,76 @@
-import 'tailwindcss/tailwind.css';
-import { Fragment, useState} from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import {BrowserRouter , Routes , Route} from 'react-router-dom'
-import Anime from './Anime'; // Import the Anime component
-import Manhwa from './Manhwa'; // Import the Manhwa component
-import Chapter from './Chapter';
-import ChapterList from './ChapterList';
+import "tailwindcss/tailwind.css";
+import { Fragment, useState, useEffect } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import Anime from "./Anime"; // Import the Anime component
+import Manhwa from "./Manhwa"; // Import the Manhwa component
+import Chapter from "./Chapter";
+import ChapterList from "./ChapterList";
+import Register from "./Register";
+import Login from "./Login";
+import SavedManhwa from "./SavedManhwa";
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 const navigation = [
-  { name: 'Anime', href: '/anime', current: false},
-  { name: 'Manhwa', href: '/manhwa', current: false}
-]
-  
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
+  { name: "Anime", href: "/anime", current: false },
+  { name: "Manhwa", href: "/manhwa", current: false },
+  { name: "My Save", href: "/signup", current: false },
+];
+
+const loggedInUserNavigation = [
+  { name: "Your Profile", href: "#" },
+  { name: "Saved", href: "/mySaves" },
+  { name: "Sign out", href: "#" },
+];
+
+const nonLoggedInUserNavigation = [
+  { name: "login", href: "/login" },
+  { name: "Sign up", href: "/signup" },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
-export default function Landing(){
+export default function Landing() {
   const [selectedManhwa, setSelectedManhwa] = useState(null);
   const [selectedChapter, setSelectedChapter] = useState([]);
   const [chapterListData, setChapterListData] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-  
+  const userJSON = localStorage.getItem("loggedInUser");
 
+  useEffect(() => {
+    const userJSON = localStorage.getItem("loggedInUser");
+    const userToken = localStorage.getItem("token")
 
+    if (userJSON) {
+      // Convert the JSON string back to an object
+      const user = JSON.parse(userJSON);
+      const localToken = JSON.parse(userToken);
+      setLoggedInUser(user);
+    }
+  }, []);
 
+  const handleLogout = () => {
+    // Remove the user data from local storage
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("token")
+    // Update the state to null
+    setLoggedInUser(null);
+    setToken(null);
+  };
 
+  const user = {
+    name: loggedInUser?.username,
+    email: loggedInUser?.email,
+    imageUrl: loggedInUser?.profileImageUrl,
+  };
 
-
-
-
-  return(
+  return (
     <>
-   
-
-     {/*
+      {/*
         This example requires updating your template:
 
         ```
@@ -77,11 +100,11 @@ export default function Landing(){
                             href={item.href}
                             className={classNames(
                               item.current
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "rounded-md px-3 py-2 text-sm font-medium"
                             )}
-                            aria-current={item.current ? 'page' : undefined}
+                            aria-current={item.current ? "page" : undefined}
                           >
                             {item.name}
                           </a>
@@ -91,49 +114,88 @@ export default function Landing(){
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      <button
+                      {/* <button
                         type="button"
                         className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                      </button> */}
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
                           <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                            <img
+                              className="h-8 w-8 rounded-full"
+                              src={user.imageUrl}
+                              alt=""
+                            />
                           </Menu.Button>
                         </div>
+
                         <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <Menu.Item key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? 'bg-gray-100' : '',
-                                      'block px-4 py-2 text-sm text-gray-700'
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </Menu.Item>
-                            ))}
-                          </Menu.Items>
-                        </Transition>
+  as={Fragment}
+  enter="transition ease-out duration-100"
+  enterFrom="transform opacity-0 scale-95"
+  enterTo="transform opacity-100 scale-100"
+  leave="transition ease-in duration-75"
+  leaveFrom="transform opacity-100 scale-100"
+  leaveTo="transform opacity-0 scale-95"
+>
+  <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+    {loggedInUser ? (
+      <>
+        {loggedInUserNavigation.map((item) => (
+          <Menu.Item key={item.name}>
+            {({ active }) => (
+              // Render the "Sign out" button differently
+              item.name === "Sign out" ? (
+                <button
+                  onClick={handleLogout}
+                  className={classNames(
+                    "block px-4 py-2 text-sm text-gray-700 w-full text-left",
+                    active ? "bg-gray-100" : ""
+                  )}
+                >
+                  {item.name}
+                </button>
+              ) : (
+                <a
+                  href={item.href}
+                  className={classNames(
+                    active ? "bg-gray-100" : "",
+                    "block px-4 py-2 text-sm text-gray-700"
+                  )}
+                >
+                  {item.name}
+                </a>
+              )
+            )}
+          </Menu.Item>
+        ))}
+      </>
+    ) : (
+      // Render non-logged-in user navigation items
+      nonLoggedInUserNavigation.map((item) => (
+        <Menu.Item key={item.name}>
+          {({ active }) => (
+            <a
+              href={item.href}
+              className={classNames(
+                active ? "bg-gray-100" : "",
+                "block px-4 py-2 text-sm text-gray-700"
+              )}
+            >
+              {item.name}
+            </a>
+          )}
+        </Menu.Item>
+      ))
+    )}
+  </Menu.Items>
+</Transition>
                       </Menu>
                     </div>
                   </div>
@@ -142,9 +204,15 @@ export default function Landing(){
                     <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
-                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                        <XMarkIcon
+                          className="block h-6 w-6"
+                          aria-hidden="true"
+                        />
                       ) : (
-                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                        <Bars3Icon
+                          className="block h-6 w-6"
+                          aria-hidden="true"
+                        />
                       )}
                     </Disclosure.Button>
                   </div>
@@ -159,10 +227,12 @@ export default function Landing(){
                       as="a"
                       href={item.href}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block rounded-md px-3 py-2 text-base font-medium'
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block rounded-md px-3 py-2 text-base font-medium"
                       )}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={item.current ? "page" : undefined}
                     >
                       {item.name}
                     </Disclosure.Button>
@@ -171,31 +241,65 @@ export default function Landing(){
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={user.imageUrl}
+                        alt=""
+                      />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">
+                        {user.name}
+                      </div>
+                      <div className="text-sm font-medium leading-none text-gray-400">
+                        {user.email}
+                      </div>
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    </button> */}
                   </div>
                   <div className="mt-3 space-y-1 px-2">
-                    {userNavigation.map((item) => (
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                      >
-                        {item.name}
-                      </Disclosure.Button>
-                    ))}
+                    {loggedInUser ? (
+                      <>
+                        {loggedInUserNavigation.map((item) => (
+                          <Disclosure.Button
+                            key={item.name}
+                            as="a"
+                            href={item.href}
+                            className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                          >
+                            {item.name}
+                          </Disclosure.Button>
+                        ))}
+                        {/* Render navigation items specific to logged-in users */}
+                        {/* For example: */}
+                        {/* <Disclosure.Button
+                          as="a"
+                          href="/dashboard"
+                          className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                        >
+                          Dashboard
+                        </Disclosure.Button> */}
+                        {/* ... Add other logged-in user navigation items */}
+                      </>
+                    ) : (
+                      // Render non-logged-in user navigation items
+                      nonLoggedInUserNavigation.map((item) => (
+                        <Disclosure.Button
+                          key={item.name}
+                          as="a"
+                          href={item.href}
+                          className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                        >
+                          {item.name}
+                        </Disclosure.Button>
+                      ))
+                    )}
                   </div>
                 </div>
               </Disclosure.Panel>
@@ -209,26 +313,77 @@ export default function Landing(){
           </div> */}
         </header>
         <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{
-                <BrowserRouter>
+          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+            {
+              <BrowserRouter>
                 <Routes>
-                <Route exact path='/anime' element={<Anime/>} />
-                <Route exact path='/manhwa' element={<Manhwa selectedManhwa={selectedManhwa} setSelectedManhwa={setSelectedManhwa}/>} />
-                <Route exact path='/chapters' element={<Chapter selectedManhwa={selectedManhwa} selectedChapter={selectedChapter} setSelectedChapter={setSelectedChapter}/>} />
-                <Route exact path='/chapter-List' element={<ChapterList selectedManhwa={selectedManhwa} setSelectedChapter={setSelectedChapter} chapterListData={chapterListData} setChapterListData={setChapterListData} />} />
+                  <Route
+                    exact
+                    path="/anime"
+                    element={<Anime loggedInUser={loggedInUser} />}
+                  />
+                  <Route
+                    exact
+                    path="/manhwa"
+                    element={
+                      <Manhwa
+                        selectedManhwa={selectedManhwa}
+                        setSelectedManhwa={setSelectedManhwa}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/chapters"
+                    element={
+                      <Chapter
+                        selectedManhwa={selectedManhwa}
+                        selectedChapter={selectedChapter}
+                        setSelectedChapter={setSelectedChapter}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/chapter-List"
+                    element={
+                      <ChapterList
+                      token={token}
+                      loggedInUser={loggedInUser}
+                        selectedManhwa={selectedManhwa}
+                        setSelectedChapter={setSelectedChapter}
+                        chapterListData={chapterListData}
+                        setChapterListData={setChapterListData}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/signup"
+                    element={
+                      <Register
+                        setLoggedInUser={setLoggedInUser}
+                        loggedInUser={loggedInUser}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/login"
+                    element={<Login setLoggedInUser={setLoggedInUser} setToken={setToken} />}
+                  />
 
-
+                  <Route
+                    exact
+                    path="/mySaves"
+                    element={<SavedManhwa loggedInUser={loggedInUser} setSelectedManhwa={setSelectedManhwa} token={token} />}
+                  />
                 </Routes>
-                
-                </BrowserRouter>
-          }</div>
+              </BrowserRouter>
+            }
+          </div>
         </main>
       </div>
-
-
-
-      
     </>
-  )
-
+  );
 }
