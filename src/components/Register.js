@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Register({ setLoggedInUser }) {
+export default function Register() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [profileImg, setProfileImg] = useState("https://img-9gag-fun.9cache.com/photo/aB0m0r2_460s.jpg");
@@ -23,6 +23,8 @@ export default function Register({ setLoggedInUser }) {
         profileImageUrl:profileImg
       })
 
+    
+
       .then((response) => {
         if (!response.ok) {
           if (response.status === 409) {
@@ -31,8 +33,6 @@ export default function Register({ setLoggedInUser }) {
           }
 
         } else {
-
-          setLoggedInUser({ userName, email });
           navigate("/login");
         }
         return response.json();

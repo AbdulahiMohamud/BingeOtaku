@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 export default function ChapterList({
   selectedManhwa,
   setSelectedChapter,
   chapterListData,
   setChapterListData,
+  loggedInUser,
+  token
+
+  
 }) {
   const [pageNum, setPageNum] = useState(1);
   const [allChaptersFetched, setAllChaptersFetched] = useState(false);
@@ -59,8 +65,39 @@ export default function ChapterList({
     setSelectedChapter(chapter);
   };
 
+
+  const saveManhwa = (manhwa) =>{
+    axios.post(
+        `${process.env.REACT_APP_SPRING_SERVER}/save/${loggedInUser.id}/manhwa` , manhwa
+        // ,
+        // {
+        //     headers: {
+        //      Authorization: `Bearer ${token}`,
+        //    },}
+           
+           );
+    
+  }
+
+
+  const handelSaveManhwaClick = (manhwa) => {
+
+    console.log({manhwa});
+    
+
+    saveManhwa(manhwa);
+
+  }
+
   return (
     <>
+
+    <button
+            onClick={() => handelSaveManhwaClick(selectedManhwa)}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mr-4"
+          >
+            Save
+          </button>
     <div onClick={() => navigate(-1)}>back</div>
   <div className="grid grid-cols-3 gap-4">
     {/* Book Cover */}
@@ -104,5 +141,5 @@ export default function ChapterList({
   </div>
 </>
 
-  );
+  )
 }

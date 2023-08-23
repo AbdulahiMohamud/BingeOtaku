@@ -2,8 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import parse from "html-react-parser";
-import { Link, useNavigate } from "react-router-dom";
-import ImageDisplay from "./ImageDisplay";
+import { Link } from "react-router-dom";
+// import ImageDisplay from "./ImageDisplay";
 
 const providerList = [
   {
@@ -83,9 +83,9 @@ export default function Manhwa({ selectedManhwa, setSelectedManhwa }) {
   const [manhwaData, setManhwaData] = useState([]);
   const [selected, setSelected] = useState(providerList[1]);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
-  const selectedProvider = selected.slug;
-  const selectedPage = pageNumber;
+//   const navigate = useNavigate();
+//   const selectedProvider = selected.slug;
+//   const selectedPage = pageNumber;
 
  
 
@@ -114,11 +114,7 @@ export default function Manhwa({ selectedManhwa, setSelectedManhwa }) {
   const handleClickManhwa = (manhwa) => {
     setSelectedManhwa(manhwa);
     setShowModal(true);
-    return (
-      <>
-        <Link to={"/chapter-List"}></Link>
-      </>
-    );
+    
   };
 
   const handleModalClose = () => {

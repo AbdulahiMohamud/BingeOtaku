@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Login({setLoggedInUser}) {
+export default function Login({setLoggedInUser,setToken}) {
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,8 +18,13 @@ export default function Login({setLoggedInUser}) {
       })
       .then((response) => {
         // const user = response.data;
+        localStorage.setItem('loggedInUser', JSON.stringify(response.data[1]));
+        localStorage.setItem('token', JSON.stringify(response.data[0]));
+
+
         console.log(response.data);
         setLoggedInUser(response.data[1])
+        setToken(response.data[0])
         navigate('/anime')
       })
       .catch((error) => {
