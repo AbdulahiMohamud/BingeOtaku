@@ -13,8 +13,7 @@ import SavedManhwa from "./SavedManhwa";
 
 const navigation = [
   { name: "Anime", href: "/anime", current: false },
-  { name: "Manhwa", href: "/manhwa", current: false },
-  { name: "My Save", href: "/signup", current: false },
+  { name: "Manhwa", href: "/manhwa", current: false }
 ];
 
 const loggedInUserNavigation = [
