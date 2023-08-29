@@ -2,7 +2,7 @@ import "tailwindcss/tailwind.css";
 import { Fragment, useState, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
 import Anime from "./Anime"; // Import the Anime component
 import Manhwa from "./Manhwa"; // Import the Manhwa component
 import Chapter from "./Chapter";
@@ -10,6 +10,7 @@ import ChapterList from "./ChapterList";
 import Register from "./Register";
 import Login from "./Login";
 import SavedManhwa from "./SavedManhwa";
+import Profile from "./Profile";
 
 const navigation = [
   { name: "Anime", href: "/anime", current: false },
@@ -17,7 +18,7 @@ const navigation = [
 ];
 
 const loggedInUserNavigation = [
-  { name: "Your Profile", href: "#" },
+  { name: "Your Profile", href: "/myProfile" },
   { name: "Saved", href: "/mySaves" },
   { name: "Sign out", href: "#" },
 ];
@@ -85,11 +86,15 @@ export default function Landing() {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <img
-                        className="h-12 w-15"
-                        src="/drangonball.png"
-                        alt="Your Company"
-                      />
+
+                      <a href="/anime">
+                        <img
+                            className="h-12 w-15"
+                            src="/drangonball.png"
+                            alt="Your Company"
+                        />
+                      </a>
+
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
@@ -377,6 +382,12 @@ export default function Landing() {
                     path="/mySaves"
                     element={<SavedManhwa loggedInUser={loggedInUser} setSelectedManhwa={setSelectedManhwa} token={token} />}
                   />
+
+                  <Route
+                    exact
+                    path="/myProfile"
+                    element={<Profile loggedInUser={loggedInUser} />}
+                    />
                 </Routes>
               </BrowserRouter>
             }
