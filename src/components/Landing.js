@@ -39,19 +39,23 @@ export default function Landing() {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  const userJSON = localStorage.getItem("loggedInUser");
-
   useEffect(() => {
     const userJSON = localStorage.getItem("loggedInUser");
-    const userToken = localStorage.getItem("token")
+    const userToken = localStorage.getItem("token");
 
     if (userJSON) {
-      // Convert the JSON string back to an object
-      const user = JSON.parse(userJSON);
-      const localToken = JSON.parse(userToken);
-      setLoggedInUser(user);
+      // Check if userJSON is not null or undefined
+      try {
+        const user = JSON.parse(userJSON);
+        const localToken = JSON.parse(userToken);
+        setLoggedInUser(user);
+      } catch (error) {
+        // Handle the case where userJSON is not valid JSON
+        console.error("Error parsing user JSON:", error);
+      }
     }
   }, []);
+
 
   const handleLogout = () => {
     // Remove the user data from local storage

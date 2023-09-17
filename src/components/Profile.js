@@ -26,7 +26,7 @@ export default function Profile(loggedInUser) {
         e.preventDefault();
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_SPRING_SERVER}/user/update/${user.userId}`,
+                `${process.env.REACT_APP_SPRING_SERVER}/user/update/${user.id}`,
                 updatedUser
             );
             setMessage(response.data.message);
@@ -70,7 +70,7 @@ export default function Profile(loggedInUser) {
                         </div>
                         <div className="col-span-2 space-y-4">
                             <div>
-                                <h2 className="text-xl font-semibold">Username</h2>
+                                <h2 className="text-xl font-semibold">{user.username}</h2>
                                 {editingField === "username" ? (
                                     renderInputField("username")
                                 ) : (
@@ -86,7 +86,7 @@ export default function Profile(loggedInUser) {
                                 )}
                             </div>
                             <div>
-                                <h2 className="text-xl font-semibold">Email</h2>
+                                <h2 className="text-xl font-semibold">{user.email}</h2>
                                 {editingField === "email" ? (
                                     renderInputField("email")
                                 ) : (
@@ -102,22 +102,22 @@ export default function Profile(loggedInUser) {
                                 )}
                             </div>
                             {/* Add other fields for profile update */}
-                            <div>
-                                <h2 className="text-xl font-semibold">Password</h2>
-                                {editingField === "password" ? (
-                                    renderInputField("password")
-                                ) : (
-                                    <>
-                                        <span>{updatedUser.password}</span>
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditingField("password")}
-                                        >
-                                            Edit
-                                        </button>
-                                    </>
-                                )}
-                            </div>
+                            {/*<div>*/}
+                            {/*    <h2 className="text-xl font-semibold">Password</h2>*/}
+                            {/*    {editingField === "password" ? (*/}
+                            {/*        renderInputField("password")*/}
+                            {/*    ) : (*/}
+                            {/*        <>*/}
+                            {/*            <span>{updatedUser.password}</span>*/}
+                            {/*            <button*/}
+                            {/*                type="button"*/}
+                            {/*                onClick={() => setEditingField("password")}*/}
+                            {/*            >*/}
+                            {/*                Edit*/}
+                            {/*            </button>*/}
+                            {/*        </>*/}
+                            {/*    )}*/}
+                            {/*</div>*/}
                             <button type="submit" className="btn btn-primary">
                                 Update Profile
                             </button>
